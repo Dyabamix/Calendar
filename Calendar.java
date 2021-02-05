@@ -19,63 +19,28 @@ public class Calendar {
         boolean leapYear = year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
 
         int codeDayOfTheWeek = codeDayOfTheWeek(leapYear, year, month);
-        
-        String[] daysInAMonth = daysInAMonth(numberMonth(month), leapYear);
+        int daysCountInMonth = daysCountInMonth(month, leapYear);
 
-        /**
-         * Тут выводим дни недели
-         */
-        for (int i = 0; i < arrayDayOfTheWeek.length; i++) {
-            System.out.print(arrayDayOfTheWeek[i] + " ");
+        printWeekDays();
+        printDays(codeDayOfTheWeek, daysCountInMonth);
+    }
+
+    private static void printWeekDays() {
+        for (String s : arrayDayOfTheWeek) {
+            System.out.print(" " + s);
         }
-        System.out.println("");
+        System.out.println();
+    }
 
-        /**
-         * Тут выводим даты
-         */
-
-        String[][] arraysOutput = new String[6][7];
-        int t = 0;
-        for (int i = 0; i < 6; i++) {
-
-            if (codeDayOfTheWeek != 0) {
-                for (int k = 0; k < codeDayOfTheWeek; k++) {
-                    arraysOutput[i][k] = "  ";
-                    System.out.print(arraysOutput[i][k] + " ");
-                }
-                for (int k = codeDayOfTheWeek; k < 7; k++) {
-                    arraysOutput[i][k] = daysInAMonth[t];
-                    if (t < 10) {
-                        System.out.print(" " + arraysOutput[i][k] + " ");
-                    } else {
-                        System.out.print(arraysOutput[i][k] + " ");
-                    }
-                    t++;
-                }
-                System.out.println("");
-                codeDayOfTheWeek = 0;
-            } else {
-                for (int k = 0; k < 7; k++) {
-
-                    if (t < daysInAMonth.length) {
-                        arraysOutput[i][k] = daysInAMonth[t];
-                        t++;
-                    } else {
-                        arraysOutput[i][k] = "  ";
-                    }
-
-                    if (t < 10) {
-                        System.out.print(" " + arraysOutput[i][k] + " ");
-                    } else {
-                        System.out.print(arraysOutput[i][k] + " ");
-                    }
-                }
-                System.out.println("");
+    private static void printDays(int codeDayOfTheWeek, int daysCountInMonth) {
+        System.out.print(" ".repeat(codeDayOfTheWeek * 3));
+        for (int i = 1; i <= daysCountInMonth; i++) {
+            System.out.print((i < 10 ? "  " : " ") + i);
+            if ((codeDayOfTheWeek + i - 1) % 7 == 6) {
+                System.out.println();
             }
         }
-
-
-        System.out.println("");
+        System.out.println();
     }
 
     /**
@@ -105,38 +70,18 @@ public class Calendar {
      * Тут считаем сколько дней в месяце и заполняем массив
      */
 
-    private static String[] daysInAMonth(int numberMonth, boolean leapYear) {
-        int numberOfDays;
-
-        if (numberMonth == 1) {
-            if (leapYear) {
-                numberOfDays = 29;
-            } else {
-                numberOfDays = 28;
-            }
-        } else {
-            numberOfDays = 31;
-        }
-
-        switch (numberMonth) {
+    private static int daysCountInMonth(String month, boolean leapYear) {
+        switch (numberMonth(month)) {
+            case 1:
+                return leapYear ? 29 : 30;
             case 3:
             case 5:
             case 8:
             case 10:
-                numberOfDays = 30;
-                break;
+                return 30;
+            default:
+                return 31;
         }
-
-        String[] daysInAMonth = new String[numberOfDays];
-
-
-        for (int i = 0; i < daysInAMonth.length; i++) {
-            daysInAMonth[i] = String.valueOf(i + 1);
-        }
-
-
-        return daysInAMonth;
-
     }
 
     /**
